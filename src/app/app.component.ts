@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MenuItem } from './shared/menuitem.enum';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+   menuItem: MenuItem = MenuItem.Recipe;
+   onFeatureSelect(event: MenuItem){
+       this.menuItem = event;
+   }
 }
