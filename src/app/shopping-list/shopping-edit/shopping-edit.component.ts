@@ -18,6 +18,7 @@ export class ShoppingEditComponent{
     this.deleteItem.emit();
   }
   OnClearClick(){
+    this.clear.emit();
   }
 
 }
