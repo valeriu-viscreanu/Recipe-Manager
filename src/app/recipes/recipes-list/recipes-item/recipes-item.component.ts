@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Recipe } from '../../recipe.models';
 
 @Component({
@@ -9,7 +9,9 @@ import { Recipe } from '../../recipe.models';
 export class RecipesItemComponent {
 
   @Input() recipe: Recipe;
- 
-  
+  @Output() selectedEvent = new EventEmitter<Recipe>();
 
+  onSelected(){
+    this.selectedEvent.emit(this.recipe)
+  }
 }

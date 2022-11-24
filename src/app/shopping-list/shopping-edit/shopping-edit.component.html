@@ -4,18 +4,18 @@
             <div class="row">
                 <div class="col-sm-5 form-group">
                     <label for="name">Name</label>
-                    <input type="text" class="from-control" id="name">
+                    <input type="text" class="from-control" id="name" #inputName>
                 </div>
                 <div class="col-sm-5 form-group">
                     <label for="amount">Amount</label>
-                    <input type="text" class="from-control" id="amount">
+                    <input type="text" class="from-control" id="amount" #inputAmount>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <button class="btn btn-success" type="submit">Add</button>
-                    <button class="btn btn-danger" type="submit">Delete</button>
-                    <button class="btn btn-primary" type="submit">Clear</button>
+                    <button class="btn btn-success" type="submit" (click)="OnAddClick(inputName, inputAmount)">Add</button>
+                    <button class="btn btn-danger" type="submit" (click)="OnDeleteClick()">Delete</button>
+                    <button class="btn btn-primary" type="submit" (click)="OnClearClick()">Clear</button>
                 </div>
             </div>
         </form>
