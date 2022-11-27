@@ -8,9 +8,12 @@ import { RecipeService } from '../recipe.service';
   styleUrls: ['./recipes-detail.component.css']
 })
 export class RecipesDetailComponent {
-  
+
   constructor(private recipeService: RecipeService) {
   }
-  
   @Input() recipe:Recipe; 
+  OnToShoppingListClick()
+  {
+    this.recipeService.shoppingListUpdate(this.recipe.ingredients);
+  }
 }
