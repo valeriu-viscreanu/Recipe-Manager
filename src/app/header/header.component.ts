@@ -7,9 +7,4 @@ import { MenuItem } from '../shared/menuitem.enum';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  @Output() featureSelected = new EventEmitter<MenuItem>();
-
-  onSelect(menuitem: MenuItem )  {
-    this.featureSelected.emit(menuitem);
-  }
 }

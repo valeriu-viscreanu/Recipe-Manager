@@ -1,4 +1,5 @@
 import { Component, Input} from '@angular/core';
+import { Router } from '@angular/router';
 import { Recipe } from '../recipe.models';
 import { RecipeService } from '../recipe.service';
 
@@ -9,11 +10,13 @@ import { RecipeService } from '../recipe.service';
 })
 export class RecipesDetailComponent {
 
-  constructor(private recipeService: RecipeService) {
+  constructor(readonly recipeService: RecipeService, readonly router: Router) {
   }
   @Input() recipe:Recipe; 
   OnToShoppingListClick()
   {
     this.recipeService.shoppingListUpdate(this.recipe.ingredients);
+    this.router.navigate(['\shopping-list']);
+
   }
 }
