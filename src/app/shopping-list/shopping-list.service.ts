@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { Ingredient } from "../shared/ingredients.model";
 
-@Injectable({providedIn: 'any'})
+@Injectable({providedIn: 'root'})
 export class ShoppingListService{    
     
   private ingredients: Ingredient[] = [new Ingredient("Salt",3)];  

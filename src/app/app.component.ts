@@ -8,7 +8,4 @@ import { MenuItem } from './shared/menuitem.enum';
 })
 export class AppComponent {
    menuItem: MenuItem = MenuItem.Recipe;
-   onFeatureSelect(event: MenuItem){
-       this.menuItem = event;
-   }
 }
