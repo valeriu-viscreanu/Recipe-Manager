@@ -12,7 +12,12 @@ export class ShoppingEditComponent{
 
   }
   OnAddClick(inputName, inputAmount){
-    this.shoppingListService.onAddItem(new Ingredient(inputName.value,inputAmount.value));
+    if (!inputName|| inputName.value == "" || !inputAmount || inputAmount.value == "") {
+      alert("Please Fill All Required Fields");
+      return false;
+    }
+    
+    this.shoppingListService.onAddItem(new Ingredient(inputName.value, inputAmount.value));
   }
   OnDeleteClick(){
     this.shoppingListService.onDeleteItem();
