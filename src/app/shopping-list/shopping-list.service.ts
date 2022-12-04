@@ -1,11 +1,12 @@
 import { EventEmitter, Injectable } from "@angular/core";
+import { Subject } from "rxjs-compat";
 import { Ingredient } from "../shared/ingredients.model";
 
 @Injectable({providedIn: 'root'})
 export class ShoppingListService{    
     
   private ingredients: Ingredient[] = [new Ingredient("Salt",3)];  
-  ingredientsChangedEvent = new EventEmitter();
+  ingredientsChangedEvent = new Subject<Ingredient[]>();
 
   getIngredients(){
     return this.ingredients.slice();
@@ -13,21 +14,21 @@ export class ShoppingListService{
    
   onDeleteItem() {
     this.ingredients.pop();
-    this.ingredientsChangedEvent.emit();
+    this.ingredientsChangedEvent.next();
   }
 
   onClear() {
     this.ingredients.length = 0;
-    this.ingredientsChangedEvent.emit();
+    this.ingredientsChangedEvent.next();
   }
 
   onAddItem(item: Ingredient) {
     this.ingredients.push(item);
-    this.ingredientsChangedEvent.emit();
+    this.ingredientsChangedEvent.next();
   }
 
   shoppingListUpdate(items: Ingredient[]) {
     this.ingredients.push(...items);  
-    this.ingredientsChangedEvent.emit();
+    this.ingredientsChangedEvent.next();
   }
 }
