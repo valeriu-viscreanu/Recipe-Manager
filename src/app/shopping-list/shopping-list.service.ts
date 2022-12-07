@@ -6,29 +6,57 @@ import { Ingredient } from "../shared/ingredients.model";
 export class ShoppingListService{    
     
   private ingredients: Ingredient[] = [new Ingredient("Salt",3)];  
-  ingredientsChangedEvent = new Subject<Ingredient[]>();
-
+  private ingredientsChangedSubject = new Subject<Ingredient[]>();
+  private ingredientSelectSubject = new Subject<number>();
+  
+  
   getIngredients(){
     return this.ingredients.slice();
   }
-   
+  
+  selectIngredient(index: number)
+  {      
+    this.ingredientSelectSubject.next(index)
+  }
+  onSelectIngredient(f: (x: number) => void)
+  {      
+    this.ingredientSelectSubject.subscribe(f);
+  }
+
+  getIngredient(index: number) : Ingredient
+  {
+    return this.ingredients[index];
+  }
+
+
+  onIngredientsChanged(f: (x: Ingredient[]) => void)
+  {      
+    this.ingredientsChangedSubject.subscribe(f);
+  }
+
   onDeleteItem() {
     this.ingredients.pop();
-    this.ingredientsChangedEvent.next();
+    this.ingredientsChangedSubject.next();
   }
 
   onClear() {
     this.ingredients.length = 0;
-    this.ingredientsChangedEvent.next();
+    this.ingredientsChangedSubject.next();
   }
 
+  
   onAddItem(item: Ingredient) {
-    this.ingredients.push(item);
-    this.ingredientsChangedEvent.next();
+    this.ingredients.push(item);    
+    this.ingredientsChangedSubject.next(this.ingredients);
+  }
+
+  onEditItem(item: Ingredient, index: number) {
+    this.ingredients[index] = item;    
+    this.ingredientsChangedSubject.next(this.ingredients);
   }
 
   shoppingListUpdate(items: Ingredient[]) {
     this.ingredients.push(...items);  
-    this.ingredientsChangedEvent.next();
+    this.ingredientsChangedSubject.next();
   }
 }

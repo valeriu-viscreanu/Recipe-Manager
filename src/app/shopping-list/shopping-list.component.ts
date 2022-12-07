@@ -15,11 +15,15 @@ export class ShoppingListComponent implements OnInit{
   
   ngOnInit() {
     this.ingredients = this.shoppingListService.getIngredients();
-    this.shoppingListService.ingredientsChangedEvent.subscribe(
-      () => { this.ingredients = this.shoppingListService.getIngredients();}
-    );
+    this.shoppingListService.onIngredientsChanged(
+      (ingredients: Ingredient[]) => {
+         this.ingredients = ingredients;
+      }
+    )
+    }
+    OnEditItemClick(index: number)
+    {
+      this.shoppingListService.selectIngredient(index);
+    }
   }
-
   
-
-}
