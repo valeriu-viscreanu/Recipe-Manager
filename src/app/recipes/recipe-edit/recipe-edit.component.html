@@ -31,8 +31,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12" formArrayName="ingredients">
-                 <div class="row" *ngFor="let formCtrl of controls; let i = index" [formGroupName]="i">
+                <div class="col-xs-12" formArrayName="ingredients" style="margin-top: 10px;">
+                 <div class="row" *ngFor="let formCtrl of controls; let i = index" [formGroupName]="i" style="margin-top: 10px;">
                     <div class="col-xs-8">
                         <input type="text" class="form-control" formControlName="name">
                     </div>
@@ -45,10 +45,15 @@
                  </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top: 10px;">
                 <div class="col-xs-12">
-                    <button class="btn btn-success">Save</button>
-                    <button class="btn btn-danger">Cance</button>
+                    <button class="btn btn-success" (click)="onAddIngredint()">Add ingredint</button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-xs-12">
+                    <button type="submit" [disabled]="form.valid" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger">Cancel</button>
                 </div>
             </div>
         </form>

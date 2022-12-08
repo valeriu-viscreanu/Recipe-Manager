@@ -1,6 +1,6 @@
 import { IvyDeclarationDtsTransform } from '@angular/compiler-cli/src/ngtsc/transform';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Recipe } from '../recipe.models';
 import { RecipeService } from '../recipe.service';
@@ -57,19 +57,26 @@ export class RecipeEditComponent implements OnInit {
     {
       recipeIngredient.push(new FormGroup(
         {
-          'name': new FormControl(''),
-          'amount': new FormControl(0)
-        }));
+          'name': new FormControl(null, Validators.required),
+          'amount': new FormControl(null, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
+        }))
     }
 
     this.form = new FormGroup({
-      'name': new FormControl(recipeName),
-      'description': new FormControl(recipeImagePath),
-      'imagePath': new FormControl(recipeDescription),
+      'name': new FormControl(recipeName, Validators.required),
+      'description': new FormControl(recipeImagePath, Validators.required),
+      'imagePath': new FormControl(recipeDescription, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
       'ingredients': recipeIngredient
     })
   }
 
+  onAddIngredint(){
+    (<FormArray>this.form.get('ingredients')).push(
+    new FormGroup({
+        'name': new FormControl(null, Validators.required),
+        'amount': new FormControl(0, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])   
+    }));
+  }
   get controls() { // a getter!
     return (<FormArray>this.form.get('ingredients')).controls;
   }
