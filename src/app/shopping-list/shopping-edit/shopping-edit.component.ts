@@ -29,12 +29,12 @@ export class ShoppingEditComponent implements OnInit{
     });
   }
 
-  onSubmit(f: NgForm) {
+  onSubmit() {
     // if (!inputName|| inputName.value == "" || !inputAmount || inputAmount.value == "") {
     //   alert("Please Fill All Required Fields");
     //   return false;
     // }
-    const ingredient = new Ingredient(f.value.name, f.value.amount);
+    const ingredient = new Ingredient(this.slForm.value.name, this.slForm.value.amount);
     if (this.editMode)
     {
       this.shoppingListService.onEditItem(ingredient, this.editedItemIndex);
@@ -44,11 +44,13 @@ export class ShoppingEditComponent implements OnInit{
       this.shoppingListService.onAddItem(ingredient);
       
     }
+    this.slForm.reset();
   }
   OnDeleteClick(): void {
-    this.shoppingListService.onDeleteItem();
+    this.shoppingListService.onDeleteItem(this.editedItemIndex);
+    this.slForm.reset();
   }
   OnClearClick() {
-    this.shoppingListService.onClear();
+    this.slForm.reset();
   }
 }

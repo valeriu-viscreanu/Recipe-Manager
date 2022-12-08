@@ -18,6 +18,7 @@ export class ShoppingListService{
   {      
     this.ingredientSelectSubject.next(index)
   }
+  
   onSelectIngredient(f: (x: number) => void)
   {      
     this.ingredientSelectSubject.subscribe(f);
@@ -28,15 +29,14 @@ export class ShoppingListService{
     return this.ingredients[index];
   }
 
-
   onIngredientsChanged(f: (x: Ingredient[]) => void)
   {      
     this.ingredientsChangedSubject.subscribe(f);
   }
 
-  onDeleteItem() {
-    this.ingredients.pop();
-    this.ingredientsChangedSubject.next();
+  onDeleteItem(index: number) {
+    this.ingredients.splice(index,1);
+    this.ingredientsChangedSubject.next(this.ingredients);
   }
 
   onClear() {
