@@ -33,7 +33,6 @@ export class RecipesDetailComponent implements OnInit{
 
   OnClickEdit()
   {
-     console.log(this.route)
-    this.router.navigate(['edit'], {relativeTo: this.route});
+     this.router.navigate(['edit'], {relativeTo: this.route});
   }
 }
