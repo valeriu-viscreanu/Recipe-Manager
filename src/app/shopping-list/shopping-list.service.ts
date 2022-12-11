@@ -58,5 +58,6 @@ export class ShoppingListService{
   shoppingListUpdate(items: Ingredient[]) {
     this.ingredients.push(...items);  
     this.ingredientsChangedSubject.next();
+    
   }
 }
