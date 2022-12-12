@@ -12,33 +12,28 @@ export class RecipeService {
   constructor(private shoppingListService: ShoppingListService) {
   }
 
-    selectedRecipeEvent = new Subject<Recipe>();
-    recipesChangedEvent = new Subject<Recipe[]>();
+  selectedRecipeEvent = new Subject<Recipe>();
+  recipesChangedEvent = new Subject<Recipe[]>();
 
-     recipes: Recipe[] = [
-          new Recipe('Test recipes',
-               'this is a test',
-               'https://image.shutterstock.com/image-photo/open-recipe-book-food-related-600w-2014258427.jpg',
-               [new Ingredient("meat", 5)]),
-          new Recipe('Chili con carne',
-               'Texas finest!!!',
-               'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/recipe-image-legacy-id-1001451_6-c8d72b8.jpg?quality=90&webp=true&resize=300,272',
-               [new Ingredient("beef", 5),
-               new Ingredient("tomatos", 2),
-               new Ingredient("chilli", 500)
-               ])
-          ];
+  private recipes: Recipe[] = []
 
-   getRecipes(){
+  getRecipes() {
     return this.recipes.slice();
-   }     
-   getRecipe(index: number){
-     return this.recipes[index];
-    }  
+  }
 
-   recipeSelected(selectedRecipe: Recipe){
-        this.selectedRecipeEvent.next(selectedRecipe);
-   }
+  getRecipe(index: number) {
+    return this.recipes[index];
+  }
+
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipesChangedEvent.next(this.recipes.slice())
+  }
+
+  recipeSelected(selectedRecipe: Recipe) {
+    this.selectedRecipeEvent.next(selectedRecipe);
+  }
+
    shoppingListUpdate(items: Ingredient[]) {
   this.shoppingListService.shoppingListUpdate(items);
    }
