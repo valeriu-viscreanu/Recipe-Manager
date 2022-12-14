@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './auth/authcomponent/auth.service';
+import { AuthService } from './auth/auth.service';
 import { MenuItem } from './shared/menuitem.enum';
 
 @Component({
