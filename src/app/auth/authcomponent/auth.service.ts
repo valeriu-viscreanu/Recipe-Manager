@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { throwError } from "rxjs";
+import { Router } from "@angular/router";
+import { BehaviorSubject, throwError } from "rxjs";
 import { Subject } from "rxjs-compat";
 import { catchError, tap } from "rxjs/operators";
 import { User } from "./user.model";
@@ -17,8 +18,14 @@ export interface AuthResponseData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    user = new Subject<User>();
-    constructor(private readonly http: HttpClient) {
+    user = new BehaviorSubject<User>(null);
+
+    constructor(private readonly http: HttpClient, private router: Router) {
+    }
+
+    logout(){
+        this.user.next(null);
+        this.router.navigate(['/login']);
     }
 
     signup(email: string, password: string) {
@@ -39,11 +46,6 @@ export class AuthService {
                     case 'EMAIL_EXISTS': errMessage = 'Email exists'
                 }
                 return throwError(errMessage);
-            }),
-            tap(d =>{
-                    const expDate = new Date(new Date().getTime() + +d.expiresIn * 1000);
-                    const user = new User(d.email, d.localId, d.idToken, expDate);
-                    this.user.next(user);
             }));
 
     }
@@ -55,7 +57,14 @@ export class AuthService {
                 password: password,
                 returnSecureToken: true
             })
-            .pipe(catchError(err => {
+            .pipe(
+                tap(d =>{
+                    const expDate = new Date(new Date().getTime() + +d.expiresIn * 1000);
+                    const user: User = new User(d.email, d.localId, d.idToken, expDate);
+                                    
+                    this.user.next(user);
+            }),
+                catchError(err => {
                 let errMessage = "Error occured";
 
                 if (!err || !err.statusText) {
