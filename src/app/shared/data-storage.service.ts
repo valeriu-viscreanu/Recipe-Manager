@@ -26,9 +26,6 @@ export class DataStorageService{
                 });
             }),
             tap((recipes: Recipe[]) => {
-                console.log('recipes');
-                console.log(recipes);
-
                 this.recipeService.setRecipes(recipes);
             }),
             catchError(err => {
