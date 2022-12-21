@@ -19,8 +19,8 @@ import { RecipesStartComponent } from './recipes/recipes-start/recipes-start.com
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { AuthComponent } from './auth/authcomponent/authcomponent.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
-import { StoreModule } from '@ngrx/store/src';
-import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
+import { StoreModule } from '@ngrx/store';
+import { shoppingListReducer } from './shopping-list/store/shopping-list.reducers';
 
 
 
