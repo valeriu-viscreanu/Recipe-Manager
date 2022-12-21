@@ -35,10 +35,6 @@ export class ShoppingEditComponent implements OnInit{
   }
 
   onSubmit() {
-    // if (!inputName|| inputName.value == "" || !inputAmount || inputAmount.value == "") {
-    //   alert("Please Fill All Required Fields");
-    //   return false;
-    // }
     const ingredient = new Ingredient(this.slForm.value.name, this.slForm.value.amount);
     if (this.editMode)
     {
