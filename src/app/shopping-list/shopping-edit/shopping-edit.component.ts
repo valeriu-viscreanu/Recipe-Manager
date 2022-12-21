@@ -38,18 +38,18 @@ export class ShoppingEditComponent implements OnInit{
     const ingredient = new Ingredient(this.slForm.value.name, this.slForm.value.amount);
     if (this.editMode)
     {
-      this.shoppingListService.onEditItem(ingredient, this.editedItemIndex);
+      this.store.dispatch(new ShoppingListAction.UpdateIngredients({ index: this.editedItemIndex, ingredient: ingredient}))
+   
       this.editMode = false; 
     }
     else{
-      this.shoppingListService.onAddItem(ingredient);
-      this.store.dispatch(new ShoppingListAction.AddIngredient(ingredient))
-      
+      this.store.dispatch(new ShoppingListAction.AddIngredient(ingredient))      
     }
     this.slForm.reset();
   }
   OnDeleteClick(): void {
-    this.shoppingListService.onDeleteItem(this.editedItemIndex);
+    this.store.dispatch(new ShoppingListAction.DeleteIngredients(this.editedItemIndex))
+   
     this.slForm.reset();
   }
   OnClearClick() {
