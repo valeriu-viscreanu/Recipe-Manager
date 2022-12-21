@@ -2,11 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
+
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing-module';
 import { DropdownDirective } from './shared/dropdown.directive';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
-
 import { HeaderComponent } from './header/header.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeListComponent } from './recipes/recipes-list/recipes-list.component';
@@ -18,6 +19,8 @@ import { RecipesStartComponent } from './recipes/recipes-start/recipes-start.com
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { AuthComponent } from './auth/authcomponent/authcomponent.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { StoreModule } from '@ngrx/store/src';
+import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
 
 
 
@@ -34,7 +37,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     DropdownDirective,
     RecipesStartComponent,
     RecipeEditComponent,
-    AuthComponent
+    AuthComponent    
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,8 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     AppRoutingModule,
     CommonModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    StoreModule.forRoot({shoppingList: shoppingListReducer})
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]
