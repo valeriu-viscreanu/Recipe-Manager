@@ -4,13 +4,14 @@ import { Store } from '@ngrx/store';
 import { Ingredient } from "../shared/ingredients.model";
 import { Recipe } from "./recipe.models";
 import * as ShoppingListAction from '../shopping-list/store/shopping-list.actions'
-import * as fromShoppingList from '../shopping-list/store/shopping-list.reducers';
+
+import * as fromStore from '../store/app.reducer';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
 
 
-  constructor(private store: Store<fromShoppingList.AppState>) {
+  constructor(private store: Store<fromStore.AppState>) {
   }
 
   selectedRecipeEvent = new Subject<Recipe>();
@@ -36,8 +37,7 @@ export class RecipeService {
   }
 
    shoppingListUpdate(items: Ingredient[]) {
-     this.store.dispatch(new ShoppingListAction.AddIngredients(items));
-  
+     this.store.dispatch(new ShoppingListAction.AddIngredients(items));  
    }
 
    addRecipe(recipe: Recipe)
