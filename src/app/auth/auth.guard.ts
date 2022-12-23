@@ -18,7 +18,6 @@ export class AuthGuard implements CanActivate {
       take(1),
       map(u => {
       const isAuthenticated = !!u;
-      debugger
       if(isAuthenticated) {
         return true;
       }

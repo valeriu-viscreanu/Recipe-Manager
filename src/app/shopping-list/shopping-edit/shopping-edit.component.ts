@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 
 import * as ShoppingListAction from "../store/shopping-list.actions"
 import { Ingredient } from 'src/app/shared/ingredients.model';
+import * as fromShoppingList from '../store/shopping-list.reducers';
 
-import { ShoppingListService } from '../shopping-list.service';
 @Component({
   selector: 'app-shopping-edit',
   templateUrl: './shopping-edit.component.html',
@@ -15,22 +15,25 @@ export class ShoppingEditComponent implements OnInit{
 
   @ViewChild('f', {static: true}) slForm: NgForm;
   editMode: boolean = false;
-  editedItemIndex: number;
   editItem: Ingredient;
 
-  constructor(private shoppingListService: ShoppingListService, 
-              private store: Store<{ shoppingList: {ingredients: Ingredient[]}}>) {
+  constructor(private store: Store<fromShoppingList.AppState>) {
   }
 
   ngOnInit(){
-    this.shoppingListService.onSelectIngredient((itemIndex)=>{
-      this.editMode = true;
-      this.editedItemIndex = itemIndex;
-      this.editItem = this.shoppingListService.getIngredient(itemIndex);
-      this.slForm.setValue({
-        name: this.editItem.name,
-        amount: this.editItem.amount,
-      })
+    this.store.select('shoppingList')
+    .subscribe(s => {
+      if(s.editedIngredientIndex > -1){
+        this.editMode = true;
+        this.editItem = s.editedIngredient;
+        this.slForm.setValue({
+          name: this.editItem.name,
+          amount: this.editItem.amount,
+        })          
+      }
+      else{
+        this.editMode = false;       
+      }
     });
   }
 
@@ -38,8 +41,7 @@ export class ShoppingEditComponent implements OnInit{
     const ingredient = new Ingredient(this.slForm.value.name, this.slForm.value.amount);
     if (this.editMode)
     {
-      this.store.dispatch(new ShoppingListAction.UpdateIngredients({ index: this.editedItemIndex, ingredient: ingredient}))
-   
+      this.store.dispatch(new ShoppingListAction.UpdateIngredients({ ingredient: ingredient}))   
       this.editMode = false; 
     }
     else{
@@ -48,11 +50,13 @@ export class ShoppingEditComponent implements OnInit{
     this.slForm.reset();
   }
   OnDeleteClick(): void {
-    this.store.dispatch(new ShoppingListAction.DeleteIngredients(this.editedItemIndex))
+    this.store.dispatch(new ShoppingListAction.DeleteIngredients())
    
     this.slForm.reset();
   }
   OnClearClick() {
     this.slForm.reset();
+    this.editMode = false; 
+    this.store.dispatch(new ShoppingListAction.StopEdit())
   }
 }
