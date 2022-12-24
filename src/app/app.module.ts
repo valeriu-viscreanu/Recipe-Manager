@@ -2,10 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
-
-
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
 import { AppComponent } from './app.component';
+
+
 import { AppRoutingModule } from './app-routing-module';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { HeaderComponent } from './header/header.component';
@@ -19,8 +21,8 @@ import { RecipesStartComponent } from './recipes/recipes-start/recipes-start.com
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { AuthComponent } from './auth/authcomponent/authcomponent.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
-import { StoreModule } from '@ngrx/store';
 import * as store from './store/app.reducer';
+import { AuthEffects } from './auth/store/auth.effects';
 
 
 
@@ -46,6 +48,7 @@ import * as store from './store/app.reducer';
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
+    EffectsModule.forRoot([AuthEffects]),
     StoreModule.forRoot(store.appReducer)
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
