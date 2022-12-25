@@ -25,7 +25,14 @@ export class AuthComponent implements OnInit {
               private store: Store<fromApp.AppState>) {
   }
   ngOnInit() {
-    
+    this.store.select('auth').subscribe( authState => {
+      this.isLoading = authState.loading
+      this.error = authState.authError;
+      if(authState.user && !this.error)
+      {
+         this.router.navigate(["./recipes"])      
+      }
+    })
   }
 
   OnSubmit(f: NgForm) {
@@ -38,20 +45,11 @@ export class AuthComponent implements OnInit {
     else {
       this.obs = this.authService.signup(email, password)
     }
-    this.obs.subscribe(
-      answer => {
-        this.router.navigate(["./recipes"])
-        this.isLoading = false;
-      },
-      error => {
-        this.error = error;
-        this.isLoading = false;
-      });
+  
    f.reset();
   }
 
   onSwitchMode() {
-    
     this.isloginMode = !this.isloginMode;
   }
 }
