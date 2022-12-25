@@ -132,7 +132,7 @@
       }
     }
   },
-  "defaultProject": "my-first-app",
+  "defaultProject": "recipe-manager",
   "cli": {
     "analytics": false
   }
