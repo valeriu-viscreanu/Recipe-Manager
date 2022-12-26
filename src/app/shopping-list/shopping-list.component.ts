@@ -17,7 +17,7 @@ export class ShoppingListComponent implements OnInit{
   constructor(private store: Store<fromStore.AppState>) { }  
   
   ngOnInit() {
-    this.ingredients = this.store.select('shoppingList');
+    this.ingredients = this.store.select(s => s.shoppingList);
   }
   OnEditItemClick(index: number) {
     this.store.dispatch(new ShoppingListActions.StartEdit(index))

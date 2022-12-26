@@ -21,7 +21,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authSubscription = this.store.select('auth').subscribe( authState => {
+    this.authSubscription = this.store.select(s => s.auth).subscribe( authState => {
       this.isLoading = authState.loading
       this.error = authState.authError;
     })

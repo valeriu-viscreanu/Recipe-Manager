@@ -21,7 +21,7 @@ export class ShoppingEditComponent implements OnInit{
   }
 
   ngOnInit(){
-    this.store.select('shoppingList')
+    this.store.select(s => s.shoppingList)
     .subscribe(s => {
       if(s.editedIngredientIndex > -1){
         this.editMode = true;

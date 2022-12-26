@@ -14,7 +14,7 @@ export class AuthInterceptorService implements HttpInterceptor{
 
     intercept(req: HttpRequest<any>, next: HttpHandler)
     {
-        return this.store.select('auth').pipe(
+        return this.store.select(s => s.auth).pipe(
             take(1),
             map(a =>{
                 return a.user

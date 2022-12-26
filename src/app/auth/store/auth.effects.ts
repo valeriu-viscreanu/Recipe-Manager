@@ -7,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 import * as AuthActions from './auth.actions';
+import { User } from '../user.model';
+import { AuthService } from '../auth.service';
 
 export interface AuthResponseData {
   kind: string;
@@ -19,8 +21,11 @@ export interface AuthResponseData {
 }
 const handleAuthentication = (resData: AuthResponseData) => {
   const expirationDate = new Date(
-    new Date().getTime() + +resData.expiresIn * 1000
-  );
+    new Date().getTime() + +resData.expiresIn * 1000);
+    const user = new User(resData.email, resData.localId, resData.idToken, expirationDate);
+    const strUser = JSON.stringify(user);
+    debugger
+    localStorage.setItem('userData',strUser);
   return new AuthActions.AuthenticateSuccess({
     email: resData.email,
     userId: resData.localId,
@@ -29,7 +34,7 @@ const handleAuthentication = (resData: AuthResponseData) => {
   });
 };
 
-const handleError = (errorRes: any) => {
+const handleError = (errorRes) => {
   let errorMessage = 'An unknown error occurred!';
   if (!errorRes.error || !errorRes.error.error) {
     return of(new AuthActions.AuthenticateFail(errorMessage));
@@ -50,9 +55,6 @@ const handleError = (errorRes: any) => {
 
 @Injectable()
 export class AuthEffects {
-
- 
-
   @Effect()
   authSignUp = this.actions$.pipe(
     ofType(AuthActions.SIGNUP_START),
@@ -63,10 +65,10 @@ export class AuthEffects {
             email: signupAction.payload.email,
             password: signupAction.payload.password,
             returnSecureToken: true
-
           }
         )
         .pipe(
+          tap(resData => this.authService.setLogOutTimer(+resData.expiresIn * 10)),
           map(resData => handleAuthentication(resData)),
           catchError(errorRes => handleError(errorRes))
         )
@@ -86,6 +88,7 @@ export class AuthEffects {
             returnSecureToken: true
           })
         .pipe(
+          tap(resData => this.authService.setLogOutTimer(+resData.expiresIn * 1000)),
           map(resData => handleAuthentication(resData)),
           catchError(errorRes => handleError(errorRes))
         );
@@ -100,17 +103,47 @@ export class AuthEffects {
     })
   )
 
+  @Effect()
+  autoLogin = this.actions$.pipe(
+    ofType(AuthActions.AUTO_LOGIN),
+    map(() => {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+
+      if (!userData) {
+        return { type: ' '};
+      };
+
+      const loadedUser = new User(userData.email, userData.id, userData._token, userData._tokenExpirationDate);
+      
+      if (loadedUser.token) {
+
+        const expDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();  
+        this.authService.setLogOutTimer(+ expDuration);
+        return new AuthActions.AuthenticateSuccess({
+          email: userData.email,
+          userId: userData.id,
+          token: userData._token,
+          expirationDate: new Date(userData._tokenExpirationDate)
+        });
+      }
+      return { type: ' '};
+    })
+  )
+
   @Effect({dispatch: false})
-  authRedirectSL = this.actions$.pipe(
+  authLogOut = this.actions$.pipe(
     ofType(AuthActions.LOGOUT),
-    tap(() => {
-       this.router.navigate(['/shopping-list']);
+    tap(() => {      
+      localStorage.removeItem('userData');
+      this.authService.clearLogoutTimmer
+       this.router.navigate(['/login']);
     })
   )
 
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 }

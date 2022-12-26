@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit{
               private store: Store<fromAppReducer.AppState>){}
 
   ngOnInit(){
-    this.store.select('auth')
+    this.store.select(s => s.auth)
       .pipe(map(state => {
         return state.user
       }))
