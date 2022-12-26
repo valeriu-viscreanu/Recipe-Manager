@@ -58,7 +58,7 @@ export class AuthService {
 
         if(loadedUser.token) {
             this.store.dispatch(
-                new fromAuthAction.Login({
+                new fromAuthAction.AuthenticateSuccess({
                                             email: userData.email, 
                                             userId: userData.id, 
                                             token: userData._token ,
@@ -105,7 +105,7 @@ export class AuthService {
                     const strUser = JSON.stringify(user)
                     this.autoLogout(+d.expiresIn * 1000);    
                     this.store.dispatch(
-                        new fromAuthAction.Login({
+                        new fromAuthAction.AuthenticateSuccess({
                             email: d.email, 
                             userId: d.localId, 
                             token: d.idToken,

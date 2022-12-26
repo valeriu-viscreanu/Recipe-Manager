@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
-import { ignoreElements } from "rxjs-compat/operator/ignoreElements";
 import { DataStorageService } from "../shared/data-storage.service";
 import { Recipe } from "./recipe.models";
 import { RecipeService } from "./recipe.service";

@@ -19,7 +19,7 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { RecipesStartComponent } from './recipes/recipes-start/recipes-start.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
-import { AuthComponent } from './auth/authcomponent/authcomponent.component';
+import { AuthComponent } from './auth/authcomponent/auth.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import * as store from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
