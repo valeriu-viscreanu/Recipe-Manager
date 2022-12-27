@@ -20,9 +20,12 @@ import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-ed
 import { RecipesStartComponent } from './recipes/recipes-start/recipes-start.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { AuthComponent } from './auth/authcomponent/auth.component';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools'
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import * as store from './store/app.reducer';
 import { AuthEffects } from './auth/store/auth.effects';
+import { environment } from 'src/environments/environment';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 
 
@@ -49,6 +52,8 @@ import { AuthEffects } from './auth/store/auth.effects';
     ReactiveFormsModule,
     HttpClientModule,
     EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
+    StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(store.appReducer)
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],

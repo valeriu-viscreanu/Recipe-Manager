@@ -24,7 +24,6 @@ const handleAuthentication = (resData: AuthResponseData) => {
     new Date().getTime() + +resData.expiresIn * 1000);
     const user = new User(resData.email, resData.localId, resData.idToken, expirationDate);
     const strUser = JSON.stringify(user);
-    debugger
     localStorage.setItem('userData',strUser);
   return new AuthActions.AuthenticateSuccess({
     email: resData.email,
