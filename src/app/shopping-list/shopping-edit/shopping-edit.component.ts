@@ -46,7 +46,6 @@ export class ShoppingEditComponent implements OnInit{
     }
     else{
       this.store.dispatch(new ShoppingListAction.AddIngredient(ingredient))      
-      this.store.dispatch(new ShoppingListAction.AddIngredient(ingredient))      
     }
     this.slForm.reset();
   }

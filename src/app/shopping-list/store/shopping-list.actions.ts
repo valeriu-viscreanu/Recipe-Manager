@@ -46,5 +46,9 @@ export class StartEdit implements Action{
 }
 
 
-export type ShoppingListActions = AddIngredient | AddIngredients 
-                                | UpdateIngredients | DeleteIngredients | StopEdit | StartEdit;
+export type ShoppingListActions = AddIngredient 
+                                | AddIngredients                         
+                                | UpdateIngredients 
+                                | DeleteIngredients                       
+                                | StopEdit 
+                                | StartEdit;
