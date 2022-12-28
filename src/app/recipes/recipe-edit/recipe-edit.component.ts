@@ -7,11 +7,13 @@ import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import * as RecipeActions from '../store/recipe.actions'
 
+
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
+
 export class RecipeEditComponent implements OnInit, OnDestroy {
 
   editMode: boolean = false;
@@ -23,6 +25,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
             readonly route: ActivatedRoute, 
             private store : Store<fromApp.AppState>) { 
     }
+    
     
     ngOnInit() {      
       this.route.params.subscribe((params: Params) => {
@@ -60,6 +63,26 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         }
         
     if (recipeIngredient.length == 0) {
+      //const recipe: Recipe = this.recipeService.getRecipe(this.id);
+       this.subscription = this.store.select(s => s.recipes).pipe(
+        map(recipeState => recipeState.recipes.find((r, index) => index == this.id)))
+        .subscribe(recipe => {
+          recipeName = recipe.name;
+          recipeImagePath = recipe.imagePath;
+          recipeDescription = recipe.description;
+          if (recipe.ingredients) {
+            for (let ingredient of recipe.ingredients) {
+              recipeIngredient.push(new FormGroup(
+                {
+                  'name': new FormControl(ingredient.name, Validators.required),
+                  'amount': new FormControl(ingredient.amount, Validators.pattern(/^[1-9]+[0-9]*$/))
+                }));
+              }
+            }
+          });          
+        }
+        
+    if (recipeIngredient.length == 0) {
       recipeIngredient.push(new FormGroup(
         {
           'name': new FormControl(null, Validators.required),
@@ -75,10 +98,12 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     })
   }
 
+
   onDeleteIngredient(index: number)
   {
     (<FormArray>this.form.get('ingredients')).removeAt(index);
   }
+
 
   onAddIngredint(){
     (<FormArray>this.form.get('ingredients')).push(
@@ -87,6 +112,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         'amount': new FormControl(0, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])   
       }));
     }
+      
     
     get controls() { // a getter!
       return (<FormArray>this.form.get('ingredients')).controls;
@@ -107,6 +133,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(){
       if(this.subscription)  this.subscription.unsubscribe();
-    }
   }
+}
+  
   

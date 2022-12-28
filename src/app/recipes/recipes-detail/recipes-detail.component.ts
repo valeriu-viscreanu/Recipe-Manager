@@ -20,6 +20,7 @@ export class RecipesDetailComponent implements OnInit, OnDestroy{
     private store: Store<fromApp.AppState>) {
   }
  
+ 
   recipe:Recipe; 
   id: number;
   s : Subscription;
@@ -36,6 +37,7 @@ export class RecipesDetailComponent implements OnInit, OnDestroy{
   ngOnDestroy() {
     this.s.unsubscribe();
   }
+
 
 
   OnToShoppingListClick()
