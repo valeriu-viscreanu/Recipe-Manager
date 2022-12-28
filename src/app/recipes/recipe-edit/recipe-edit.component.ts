@@ -1,13 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import * as fromApp from '../../store/app.reducer'
-import { Store } from '@ngrx/store';
-import { map } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
-import * as RecipeActions from '../store/recipe.actions'
-
 import * as fromApp from '../../store/app.reducer'
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
@@ -23,17 +16,12 @@ import * as RecipeActions from '../store/recipe.actions'
 
 export class RecipeEditComponent implements OnInit, OnDestroy {
 
-export class RecipeEditComponent implements OnInit, OnDestroy {
-
   editMode: boolean = false;
   id: number = -1;
   form: FormGroup;
   subscription: Subscription;
-  subscription: Subscription;
 
   constructor(readonly router: Router,
-            readonly route: ActivatedRoute, 
-            private store : Store<fromApp.AppState>) { 
             readonly route: ActivatedRoute, 
             private store : Store<fromApp.AppState>) { 
     }
@@ -63,7 +51,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           recipeName = recipe.name;
           recipeImagePath = recipe.imagePath;
           recipeDescription = recipe.description;
-          debugger
           if (recipe.ingredients && recipeIngredientFormArray.value.length == 0) {
             for (let ingredient of recipe.ingredients) {
               recipeIngredientFormArray.push(new FormGroup(
@@ -105,7 +92,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   onAddIngredient(){
     (<FormArray>this.form.get('ingredients')).push(
       new FormGroup({
-      new FormGroup({
         'name': new FormControl(null, Validators.required),
         'amount': new FormControl(0, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])   
       }));
@@ -119,7 +105,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     onSubmit()
     {
       if(this.editMode){
-        debugger
         this.store.dispatch(new RecipeActions.UpdateRecipe({
           index: this.id,
           newRecipe: this.form.value
@@ -131,9 +116,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       this.router.navigate(['../']);
     
     }
-
-    ngOnDestroy(){
-      if(this.subscription)  this.subscription.unsubscribe();
 
     ngOnDestroy(){
       if(this.subscription)  this.subscription.unsubscribe();
