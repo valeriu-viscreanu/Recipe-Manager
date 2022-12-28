@@ -1,6 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import * as fromApp from '../../store/app.reducer'
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import * as RecipeActions from '../store/recipe.actions'
+
 import * as fromApp from '../../store/app.reducer'
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
@@ -16,15 +23,22 @@ import * as RecipeActions from '../store/recipe.actions'
 
 export class RecipeEditComponent implements OnInit, OnDestroy {
 
+export class RecipeEditComponent implements OnInit, OnDestroy {
+
   editMode: boolean = false;
   id: number = -1;
   form: FormGroup;
+  subscription: Subscription;
   subscription: Subscription;
 
   constructor(readonly router: Router,
             readonly route: ActivatedRoute, 
             private store : Store<fromApp.AppState>) { 
+            readonly route: ActivatedRoute, 
+            private store : Store<fromApp.AppState>) { 
     }
+    
+    
     
     
     ngOnInit() {      
@@ -80,6 +94,8 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
 
+
+
   onDeleteIngredient(index: number)
   {
     (<FormArray>this.form.get('ingredients')).removeAt(index);
@@ -88,6 +104,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   onAddIngredient(){
     (<FormArray>this.form.get('ingredients')).push(
+      new FormGroup({
       new FormGroup({
         'name': new FormControl(null, Validators.required),
         'amount': new FormControl(0, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])   
@@ -117,7 +134,12 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(){
       if(this.subscription)  this.subscription.unsubscribe();
+
+    ngOnDestroy(){
+      if(this.subscription)  this.subscription.unsubscribe();
   }
 }
+  
+  
   
   
