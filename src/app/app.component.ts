@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './auth/auth.service';
-import { MenuItem } from './shared/menuitem.enum';
+import { Store } from '@ngrx/store';
+import * as appState from './store/app.reducer';
+import * as authActions from './auth/store/auth.actions';
+
 
 @Component({
   selector: 'app-root',
@@ -8,10 +10,10 @@ import { MenuItem } from './shared/menuitem.enum';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly store: Store<appState.AppState>) {
   }
 
   ngOnInit() {
-    this.authService.autoLogin();
+    this.store.dispatch(new authActions.AutoLogin());
   }
 }
