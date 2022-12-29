@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Actions, ofType, Effect } from '@ngrx/effects';
-import { map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { Actions, ofType, createEffect} from '@ngrx/effects';
+import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Recipe } from '../recipe.models';
 import * as RecipeActions from './recipe.actions'
 import * as fromApp from '../../store/app.reducer' 
@@ -9,12 +9,12 @@ import { Store } from '@ngrx/store';
 
 @Injectable()
 export class RecipeEffects{    
-    @Effect()
-    fetchRecipes = this.actions$.pipe(
+    
+    fetchRecipes = createEffect(() => this.actions$.pipe(
                         ofType(RecipeActions.FETCH_RECIPES),
                         switchMap(() => {
-                            return this.http.get<Recipe[]>('https://ng-course-project-c25ff.firebaseio.com/recipes.json')
-                        }),
+                            return this.http.get<Recipe[]>('https://ng-course-project-c25ff.firebaseio.com/recipes.json')                       
+                        .pipe(
                         map(recipes => {
                             if(recipes){
                                         return recipes.map((recipe) =>
@@ -29,19 +29,19 @@ export class RecipeEffects{
                                     return [];
                                 }
                         }),
-                        map(recipes => new RecipeActions.SetRecipes(recipes))
-    );
-
-    @Effect()
-    storeRecipes = this.actions$.pipe(
+                        map(recipes => new RecipeActions.SetRecipes(recipes)))
+                    })))
+    
+    storeRecipes = createEffect(() => this.actions$.pipe(
         ofType(RecipeActions.STORE_RECIPE),
         withLatestFrom(this.store.select(r => r.recipes)),
-        switchMap(([a,recipeState]) => {
-            const recipes= recipeState.recipes;
+        switchMap(([a, recipeState]) => {
+            const recipes = recipeState.recipes;
             return this.http.put('https://ng-course-project-c25ff.firebaseio.com/recipes.json', recipes);
-        
+
         })
-    )
+    ), {dispatch: false})
+       
 
     constructor(private actions$: Actions,
                 private readonly http: HttpClient,

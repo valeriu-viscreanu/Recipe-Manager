@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Actions, ofType, Effect } from '@ngrx/effects';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { switchMap, catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -54,8 +54,8 @@ const handleError = (errorRes) => {
 
 @Injectable()
 export class AuthEffects {
-  @Effect()
-  authSignUp = this.actions$.pipe(
+  
+  authSignUp = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.SIGNUP_START),
     switchMap((signupAction: AuthActions.SignupStart) => {
        return this.http.post<AuthResponseData>(
@@ -67,20 +67,19 @@ export class AuthEffects {
           }
         )
         .pipe(
-          tap(resData => this.authService.setLogOutTimer(+resData.expiresIn * 10)),
+          tap(resData => this.authService.setLogOutTimer(+resData.expiresIn * 1000)),
           map(resData => handleAuthentication(resData)),
           catchError(errorRes => handleError(errorRes))
         )
     })
-  );
+  ));
 
-  @Effect()
-  authLogin = this.actions$.pipe(
+  authLogin = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.LOGIN_START),
     switchMap((authData: AuthActions.LoginStart) => {
       return this.http
         .post<AuthResponseData>(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.fbApiKey,
+          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.fbApiKey,
           {
             email: authData.payload.email,
             password: authData.payload.password,
@@ -92,18 +91,16 @@ export class AuthEffects {
           catchError(errorRes => handleError(errorRes))
         );
     })
-  );
-
-  @Effect({dispatch: false})
-  authRedirect = this.actions$.pipe(
+  ));
+  authRedirect = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.AUTHENTICATE_SUCCESS),
     tap(() => {
        this.router.navigate(['/']);
     })
-  )
+  ), {dispatch: false});
 
-  @Effect()
-  autoLogin = this.actions$.pipe(
+  
+  autoLogin = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.AUTO_LOGIN),
     map(() => {
       const userData = JSON.parse(localStorage.getItem('userData'));
@@ -127,17 +124,17 @@ export class AuthEffects {
       }
       return { type: ' '};
     })
-  )
+  ));
 
-  @Effect({dispatch: false})
-  authLogOut = this.actions$.pipe(
+  authLogOut = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.LOGOUT),
     tap(() => {      
       localStorage.removeItem('userData');
       this.authService.clearLogoutTimmer
        this.router.navigate(['/login']);
     })
-  )
+    ), {dispatch: false});
+
 
   constructor(
     private actions$: Actions,
