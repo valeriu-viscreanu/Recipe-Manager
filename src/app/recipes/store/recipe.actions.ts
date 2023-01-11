@@ -1,12 +1,12 @@
 import { Action } from "@ngrx/store";
 import { Recipe } from "../recipe.models";
 
-export const SET_RECIPES = 'SET_RECIPES'
-export const FETCH_RECIPES = 'FETCH_RECIPES'
-export const STORE_RECIPE = 'STORE_RECIPE'
-export const ADD_RECIPE = 'ADD_RECIPES'
-export const UPDATE_RECIPE = 'UPDATE_RECIPES'
-export const DELETE_RECIPE = 'DELETE_RECIPES'
+export const SET_RECIPES = '[Recipe] SET_RECIPES'
+export const FETCH_RECIPES = '[Recipe] FETCH_RECIPES'
+export const STORE_RECIPE = '[Recipe] STORE_RECIPE'
+export const ADD_RECIPE = '[Recipe] ADD_RECIPES'
+export const UPDATE_RECIPE = '[Recipe] UPDATE_RECIPES'
+export const DELETE_RECIPE = '[Recipe] DELETE_RECIPES'
 
 export class SetRecipes implements Action{
     readonly type = SET_RECIPES;

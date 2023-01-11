@@ -1,11 +1,11 @@
 import { Action } from "@ngrx/store";
 
-export const AUTHENTICATE_SUCCESS = 'AUTHENTICATE_SUCCESS'
-export const LOGOUT = 'LOGOUT'
-export const LOGIN_START = 'LOGIN_START'
-export const SIGNUP_START = 'SIGNUP_START'
-export const AUTHENTICATE_FAIL = 'AUTHENTICATE_FAIL'
-export const AUTO_LOGIN = 'AUTO_LOGIN'
+export const AUTHENTICATE_SUCCESS = '[Auth] AUTHENTICATE_SUCCESS'
+export const LOGOUT = '[Auth] LOGOUT'
+export const LOGIN_START = '[Auth] LOGIN_START'
+export const SIGNUP_START = '[Auth] SIGNUP_START'
+export const AUTHENTICATE_FAIL = '[Auth] AUTHENTICATE_FAIL'
+export const AUTO_LOGIN = '[Auth] AUTO_LOGIN'
 
 export class AuthenticateSuccess implements Action{
     readonly type = AUTHENTICATE_SUCCESS;
