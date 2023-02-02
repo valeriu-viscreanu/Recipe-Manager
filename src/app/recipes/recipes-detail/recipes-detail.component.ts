@@ -42,7 +42,7 @@ export class RecipesDetailComponent implements OnInit, OnDestroy{
 
   OnToShoppingListClick()
   {
-    this.store.dispatch(new ShopppingListActions.AddIngredients(this.recipe.ingredients))
+    this.store.dispatch( ShopppingListActions.addIngredients({ingredients: this.recipe.ingredients}))
     this.router.navigate(['shopping-list']);
   }
 

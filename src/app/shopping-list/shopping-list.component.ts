@@ -20,6 +20,6 @@ export class ShoppingListComponent implements OnInit{
     this.ingredients = this.store.select(s => s.shoppingList);
   }
   OnEditItemClick(index: number) {
-    this.store.dispatch(new ShoppingListActions.StartEdit(index))
+    this.store.dispatch(ShoppingListActions.startEdit({index: index}))
   }
 } 

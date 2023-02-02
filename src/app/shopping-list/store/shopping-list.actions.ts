@@ -1,54 +1,31 @@
-import { Action } from "@ngrx/store";
+import { Action, createAction, props } from "@ngrx/store";
 import { Ingredient } from "src/app/shared/ingredients.model";
 
-export const ADD_INGREDIENT = '[ShoppingList] ADD_INGREDIENT';
-export const ADD_INGREDIENTS = '[ShoppingList] ADD_INGREDIENTS';
-export const DELETE_INGREDIENT = '[ShoppingList] DELETE_INGREDIENT';
-export const UPDATE_INGREDIENT = '[ShoppingList] UPDATE_INGREDIENT';
-export const START_EDIT = '[ShoppingList] START_EDIT';
-export const STOP_EDIT = '[ShoppingList] STOP_EDIT';
 
+export const addIngredient = createAction(
+    '[ShoppingList] ADD_INGREDIENT',
+     props<Ingredient>()
+    );
+    
+export const addIngredients = createAction(
+    '[ShoppingList] ADD_INGREDIENTS',
+     props<{ingredients: Ingredient[]}>()
+    );
 
-export class AddIngredient implements Action{
-    readonly type = ADD_INGREDIENT;
+export const deleteIngredients = createAction(
+    '[ShoppingList] DELETE_INGREDIENTS'
+    );
 
-    constructor(public  payload: Ingredient){
-    }
-}
+export const updateIngredient = createAction(
+    '[ShoppingList] UPDATE_INGREDIENT',
+     props<Ingredient>()
+    );
 
-export class AddIngredients implements Action{
-    readonly type = ADD_INGREDIENTS;
+export const startEdit = createAction(
+    '[ShoppingList] [ShoppingList] START_EDIT',
+     props<{index: number}>()
+    );
 
-    constructor(public  payload: Ingredient[]){
-    }
-}
-
-export class UpdateIngredients implements Action{
-    readonly type = UPDATE_INGREDIENT;
-
-    constructor(public  payload: {ingredient: Ingredient}){
-    }
-}
-
-export class DeleteIngredients implements Action{
-    readonly type = DELETE_INGREDIENT;
-}
-
-export class StopEdit implements Action{
-    readonly type = STOP_EDIT;
-}
-
-export class StartEdit implements Action{
-    readonly type = START_EDIT;
-
-    constructor(public  payload: number){
-    }
-}
-
-
-export type ShoppingListActions = AddIngredient 
-                                | AddIngredients                         
-                                | UpdateIngredients 
-                                | DeleteIngredients                       
-                                | StopEdit 
-                                | StartEdit;
+export const stopEdit = createAction(
+    '[ShoppingList] STOP_EDIT',
+    );
