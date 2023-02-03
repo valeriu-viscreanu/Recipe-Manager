@@ -11,23 +11,22 @@ import { take, map, switchMap } from "rxjs/operators";
 
 
 @Injectable({providedIn: 'root'})
-export class RecipeResolverService implements Resolve<Recipe[]>{
+export class RecipeResolverService implements Resolve<{recipes: Recipe[]}>{
     constructor(private store: Store<fromApp.AppState>,
                 private actions$: Actions){
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        // return this.dataStorageService.fetchRecipes();
         return this.store.select(s => s.recipes).pipe(
           take(1),
           map(recipesState => {
-            return recipesState.recipes;
+            return recipesState;
           }),
           switchMap(recipes => {
-            if (recipes.length === 0) {
-              this.store.dispatch(new RecipesActions.FetchRecipes());
+            if (recipes.recipes.length === 0) {
+              this.store.dispatch(RecipesActions.fetchRecipes());
               return this.actions$.pipe(
-                ofType(RecipesActions.SET_RECIPES),
+                ofType(RecipesActions.setRecipes),
                 take(1)
               );
             } else {
