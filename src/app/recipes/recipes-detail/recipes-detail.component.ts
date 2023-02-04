@@ -38,11 +38,9 @@ export class RecipesDetailComponent implements OnInit, OnDestroy{
     this.s.unsubscribe();
   }
 
-
-
   OnToShoppingListClick()
   {
-    this.store.dispatch(new ShopppingListActions.AddIngredients(this.recipe.ingredients))
+    this.store.dispatch( ShopppingListActions.addIngredients({ingredients: this.recipe.ingredients}))
     this.router.navigate(['shopping-list']);
   }
 
@@ -52,7 +50,7 @@ export class RecipesDetailComponent implements OnInit, OnDestroy{
   }
 
   OnDelete(){
-    this.store.dispatch(new RecipesActions.DeleteRecipe(this.id));
+    this.store.dispatch(RecipesActions.deleteRecipe({payload: this.id}));
     this.router.navigate(['../']);
   }
 }

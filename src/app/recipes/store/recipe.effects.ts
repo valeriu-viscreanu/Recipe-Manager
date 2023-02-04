@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 export class RecipeEffects{    
     
     fetchRecipes = createEffect(() => this.actions$.pipe(
-                        ofType(RecipeActions.FETCH_RECIPES),
+                        ofType(RecipeActions.fetchRecipes),
                         switchMap(() => {
                             return this.http.get<Recipe[]>('https://ng-course-project-c25ff.firebaseio.com/recipes.json')                       
                         .pipe(
@@ -29,11 +29,11 @@ export class RecipeEffects{
                                     return [];
                                 }
                         }),
-                        map(recipes => new RecipeActions.SetRecipes(recipes)))
+                        map(recipes => RecipeActions.setRecipes({recipes: recipes})))
                     })))
     
     storeRecipes = createEffect(() => this.actions$.pipe(
-        ofType(RecipeActions.STORE_RECIPE),
+        ofType(RecipeActions.storeRecipe),
         withLatestFrom(this.store.select(r => r.recipes)),
         switchMap(([a, recipeState]) => {
             const recipes = recipeState.recipes;

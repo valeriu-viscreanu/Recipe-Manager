@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit{
   }
 
   onSaveData(){
-    this.store.dispatch(new RecipeActions.StoreRecipes);
+    this.store.dispatch(RecipeActions.storeRecipe());
   }
 
   onLogout()
@@ -39,6 +39,6 @@ export class HeaderComponent implements OnInit{
   }
 
   onFetchData(){
-    this.store.dispatch(new RecipeActions.FetchRecipes());
+    this.store.dispatch(RecipeActions.fetchRecipes());
   }
 }
