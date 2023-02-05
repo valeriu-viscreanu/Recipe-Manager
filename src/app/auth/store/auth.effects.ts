@@ -25,7 +25,7 @@ const handleAuthentication = (resData: AuthResponseData) => {
   const user = new User(resData.email, resData.localId, resData.idToken, expirationDate);
   const strUser = JSON.stringify(user);
   localStorage.setItem('userData', strUser);
-  return new AuthActions.AuthenticateSuccess({
+  return AuthActions.authenticateSuccess({
     email: resData.email,
     userId: resData.localId,
     token: resData.idToken,
@@ -36,7 +36,7 @@ const handleAuthentication = (resData: AuthResponseData) => {
 const handleError = (errorRes) => {
   let errorMessage = 'An unknown error occurred!';
   if (!errorRes.error || !errorRes.error.error) {
-    return of(new AuthActions.AuthenticateFail(errorMessage));
+    return of(AuthActions.authenticateFail({message: errorMessage}));
   }
   switch (errorRes.error.error.message) {
     case 'EMAIL_EXISTS':
@@ -49,20 +49,20 @@ const handleError = (errorRes) => {
       errorMessage = 'This password is not correct.';
       break;
   }
-  return of(new AuthActions.AuthenticateFail(errorMessage));
+  return of(AuthActions.authenticateFail({message: errorMessage}));
 };
 
 @Injectable()
 export class AuthEffects {
 
   authSignUp = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.SIGNUP_START),
-    switchMap((signupAction: AuthActions.SignupStart) => {
+    ofType(AuthActions.signupStart),
+    switchMap((signupAction) => {
       return this.http.post<AuthResponseData>(
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.fbApiKey,
         {
-          email: signupAction.payload.email,
-          password: signupAction.payload.password,
+          email: signupAction.email,
+          password: signupAction.password,
           returnSecureToken: true
         }
       )
@@ -75,14 +75,14 @@ export class AuthEffects {
   ));
 
   authLogin = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.LOGIN_START),
-    switchMap((authData: AuthActions.LoginStart) => {
+    ofType(AuthActions.loginStart),
+    switchMap((authData) => {
       return this.http
         .post<AuthResponseData>(
           'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.fbApiKey,
           {
-            email: authData.payload.email,
-            password: authData.payload.password,
+            email: authData.email,
+            password: authData.password,
             returnSecureToken: true
           })
         .pipe(
@@ -93,7 +93,7 @@ export class AuthEffects {
     })
   ));
   authRedirect = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.AUTHENTICATE_SUCCESS),
+    ofType(AuthActions.authenticateSuccess),
     tap(() => {
       this.router.navigate(['/']);
     })
@@ -101,7 +101,7 @@ export class AuthEffects {
 
 
   autoLogin = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.AUTO_LOGIN),
+    ofType(AuthActions.autoLogin),
     map(() => {
       const userData = JSON.parse(localStorage.getItem('userData'));
 
@@ -115,7 +115,7 @@ export class AuthEffects {
 
         const expDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
         this.authService.setLogOutTimer(+ expDuration);
-        return new AuthActions.AuthenticateSuccess({
+        return AuthActions.authenticateSuccess({
           email: userData.email,
           userId: userData.id,
           token: userData._token,
@@ -127,7 +127,7 @@ export class AuthEffects {
   ));
 
   authLogOut = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.LOGOUT),
+    ofType(AuthActions.logout),
     tap(() => {
       localStorage.removeItem('userData');
       this.authService.clearLogoutTimmer
